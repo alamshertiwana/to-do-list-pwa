@@ -103,6 +103,31 @@
             <label for="radio-1">High</label>            
 
           </div>
+
+          <p class="form-field-title">Save Geolocation</p>
+          <div class="mdc-form-field">
+
+            <div class="mdc-radio">
+            <input class="mdc-radio__native-control" type="radio" id="geo-1" name="geolocation" value="0" checked>
+            <div class="mdc-radio__background">
+            <div class="mdc-radio__outer-circle"></div>
+            <div class="mdc-radio__inner-circle"></div>
+            </div>
+            <div class="mdc-radio__ripple"></div>
+            </div>
+            <label for="radio-1">No</label>
+
+            <div class="mdc-radio">
+              <input class="mdc-radio__native-control" type="radio" id="geo-2" name="geolocation" value="1">
+              <div class="mdc-radio__background">
+              <div class="mdc-radio__outer-circle"></div>
+              <div class="mdc-radio__inner-circle"></div>
+              </div>
+              <div class="mdc-radio__ripple"></div>
+            </div>
+            <label for="radio-1">Yes</label>            
+
+          </div>          
           
           <p class="form-field-title">Highlight Task</p>
           <div class="mdc-form-field">
@@ -142,10 +167,13 @@
 <script>
 
 //code for page specific material elements
-mdc.textField.MDCTextField.attachTo(document.querySelector('.todo-description'))
-mdc.textField.MDCTextField.attachTo(document.querySelector('.todo-title'))
+mdc.textField.MDCTextField.attachTo(document.querySelector('.todo-description'));
+mdc.textField.MDCTextField.attachTo(document.querySelector('.todo-title'));
 mdc.ripple.MDCRipple.attachTo(document.querySelector('.foo-button'));
 
+//Geo Coordinates
+let lat;
+let lon;
 //code for indexeddb
 const request = indexedDB.open("TodoList",5);
 let db;
@@ -156,6 +184,13 @@ request.onsuccess = function() {
 
 const checkbox = mdc.checkbox.MDCCheckbox.attachTo(document.querySelector('.mdc-checkbox'));
 
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position){
+      lat = position.coords.latitude; 
+      lon = position.coords.longitude;
+    });
+  }
+
 //Submit the form on the page
 document.getElementById("todo-add-form").addEventListener("submit",function(e){
   e.preventDefault();
@@ -163,12 +198,18 @@ document.getElementById("todo-add-form").addEventListener("submit",function(e){
   const todo_title        = document.getElementById("task-title").value;
   const todo_description  = document.getElementById("task-description").value;
   const todo_priority     = document.querySelector('input[name="priority"]:checked').value;
+  const todo_geolocation  = document.querySelector('input[name="geolocation"]:checked').value;
   const todo_highlight    = checkbox.checked;
+  let curr_geo_location   = null;
+
+  if(todo_geolocation == 1){
+    curr_geo_location =[lat,lon];
+  }
 
   var transaction = db.transaction(["tasks"], "readwrite");
   var objectStore = transaction.objectStore("tasks");
 
-  var request = objectStore.add({title: todo_title, description: todo_description, priority: todo_priority, highlight: todo_highlight});
+  var request = objectStore.add({title: todo_title, description: todo_description, priority: todo_priority, highlight: todo_highlight, geo_location: curr_geo_location});
 
   request.onsuccess = event => {
     // event.target.result === customer.ssn;
