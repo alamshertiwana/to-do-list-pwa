@@ -1,0 +1,29 @@
+{
+  "name": "Todo List",
+  "id": "index.html",
+  "short_name": "Todo List",
+  "description": "This is an app to create todo lists",
+  "display": "standalone",
+  "start_url": "index.html",
+  "scope": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#4a89dc",
+  "icons": [
+    {
+    "src": "icon.jpg",
+    "sizes": "256x256",
+    "type": "image/jpg"
+    },
+    {
+    "src": "icon_1000.jpg",
+    "sizes": "1000x1000",
+    "type": "image/png"
+    },
+    {
+    "src": "maskable_icon.jpg",
+    "sizes": "1000x1000",
+    "type": "image/png",
+    "purpose": "maskable"
+    }
+  ]
+}

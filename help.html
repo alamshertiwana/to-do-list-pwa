@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6200ee"/>
+  <link href="material-components-web.min.css" rel="stylesheet">
+  <script src="material-components-web.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json" />    
+</head>
+<body>
+
+  <header class="mdc-top-app-bar">
+    <div class="mdc-top-app-bar__row">
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button arrow-back" aria-label="Close"><a href="index.html">arrow_back</a></button>          
+        <span class="mdc-top-app-bar__title">Help</span>
+      </section>
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="add" onclick="window.location.href='add.html'">add</button>
+        <button id="wifi-icon" class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search">wifi</button>
+
+        <div id="todo-menu-container" class="mdc-menu-surface--anchor">
+            <button id="todo-menu-button" class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Options">more_vert</button>
+
+            <div class="mdc-menu mdc-menu-surface">
+                <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                    <li class="mdc-list-item" role="menuitem">
+                      <span class="mdc-list-item__ripple"></span>
+                      <span class="mdc-list-item__text"><a href="index.html">Home</a></span>
+                    </li>                      
+                    <li class="mdc-list-item" role="menuitem">
+                      <span class="mdc-list-item__ripple"></span>
+                      <span class="mdc-list-item__text"><a href="add.html">Add Item</a></span>
+                    </li>
+                    <li class="mdc-list-item" role="menuitem">
+                      <span class="mdc-list-item__ripple"></span>
+                      <span class="mdc-list-item__text"><a href="help.html">Help</a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+      </section>
+    </div>
+  </header>
+
+    <main class="mdc-top-app-bar--fixed-adjust">
+
+      <div class="help-container">
+        <h1>Help</h1>
+        <p class="help-before">The content below is loaded from a json file.</p>
+        <div id="help-content"></div>
+      </div>
+
+    </main>
+      
+</body>
+
+<script type="text/javascript" src="help.json"></script>
+
+<script>
+
+fetch('help.json').then(  result => result.json() ).then(function (data){  
+
+  //console.log(data);
+  const help_content = document.getElementById("help-content");
+  
+  for(let i=0; i<data.length; i++){
+    help_content.innerHTML = help_content.innerHTML +'<div class="help-item"><h2 class="help-title">'+parseInt(i+1)+' .'+data[i].title+'</h2><p class="help-description">'+data[i].description+'</p></div>';
+  }
+
+});
+
+
+//Code for the Material Menu
+const menu = mdc.menu.MDCMenu.attachTo(document.querySelector(".mdc-menu"));
+menu.setAbsolutePosition(100, 100);
+
+const menu_button = document.getElementById("todo-menu-button");
+
+menu_button.addEventListener("click",function(event){
+    event.preventDefault();
+    menu.open=true;
+});
+
+/*For checking the internet connection changes the icon in the header when internet connection changes*/
+document.getElementById('wifi-icon').innerHTML = navigator.onLine ? 'wifi' : 'wifi_off';
+
+function handleStateChange() {
+  var state = navigator.onLine ? 'online' : 'offline';
+  var wifi = navigator.onLine ? 'wifi' : 'wifi_off';
+  
+  document.getElementById('wifi-icon').innerHTML = wifi;
+}
+
+window.addEventListener('online', handleStateChange);
+window.addEventListener('offline', handleStateChange);
+
+
+</script>
+</html>  

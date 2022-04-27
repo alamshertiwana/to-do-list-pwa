@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6200ee"/>
+  <link href="material-components-web.min.css" rel="stylesheet">
+  <script src="material-components-web.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json" />    
+</head>
+
+<body>
+
+  <header class="mdc-top-app-bar">
+      <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <span class="mdc-top-app-bar__title">TODO List</span>
+        </section>
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="add" onclick="window.location.href='add.html'">add</button>
+          <button id="wifi-icon" class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search">wifi</button>
+
+          <div id="todo-menu-container" class="mdc-menu-surface--anchor">
+              <button id="todo-menu-button" class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Options">more_vert</button>
+
+              <div class="mdc-menu mdc-menu-surface">
+                  <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                      <li class="mdc-list-item" role="menuitem">
+                        <span class="mdc-list-item__ripple"></span>
+                        <span class="mdc-list-item__text"><a href="index.html">Home</a></span>
+                      </li>                      
+                      <li class="mdc-list-item" role="menuitem">
+                        <span class="mdc-list-item__ripple"></span>
+                        <span class="mdc-list-item__text"><a href="add.html">Add Item</a></span>
+                      </li>
+                      <li class="mdc-list-item" role="menuitem">
+                        <span class="mdc-list-item__ripple"></span>
+                        <span class="mdc-list-item__text"><a href="help.html">Help</a></span>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+        </section>
+      </div>
+    </header>
+      
+    <main class="mdc-top-app-bar--fixed-adjust">
+
+      <div class="battery-container">
+        <p>Battery Status: <strong id="charging">unknown</strong>, Battery Level: <strong id="level">unknown</b>.</strong>
+          <p id="home-message"></p>
+      </div>        
+
+      <ul class="mdc-list" id="todo-list">
+        <!--
+          <li class="mdc-list-item" tabindex="0">
+            <span class="mdc-list-item__ripple"></span>
+            <span class="mdc-list-item__text">Single-line item</span>
+          </li>                                                                             
+        </ul>
+        -->
+      </ul>
+      
+    </main>
+</body>
+
+<script>
+
+/*Service Worker*/
+if ('serviceWorker' in navigator) {
+    //console.log("Will the service worker register?");
+    navigator.serviceWorker.register('sw.js')
+    .then(function(reg){
+        //console.log("Yes, it did.");
+    }).catch(function(err) {
+        //console.log("No it didn't. This happened: ", err)
+    });
+}  
+
+/*Shows the batter status and the battery level on the page on the #charging and #level elements*/
+if ('getBattery' in navigator || ('battery' in navigator && 'Promise' in window)) {
+
+  var batteryPromise;
+  
+  if ('getBattery' in navigator) {
+    batteryPromise = navigator.getBattery();
+  } else {
+    batteryPromise = Promise.resolve(navigator.battery);
+  }
+  
+  batteryPromise.then(function (battery) {
+    document.getElementById('charging').innerHTML = battery.charging ? 'charging' : 'discharging';
+    document.getElementById('level').innerHTML = parseInt(battery.level*100)+'%';    
+  });
+  
+}
+//-------------------------------------------------------
+const todo_list = document.getElementById("todo-list");
+const request = indexedDB.open("TodoList",5);
+let db;
+
+request.onupgradeneeded = function() {
+  // The database did not previously exist, so create object stores and indexes.
+  const db = request.result;
+  const store = db.createObjectStore("tasks", {keyPath: "id", autoIncrement:true});
+
+  // Populate with initial data.
+  /*
+  store.put({title: "Task 1", description: "Description of task 1"});
+  store.put({title: "Task 2", description: "Another description in the app"});
+  store.put({title: "Task 3", description: "Just another description in the app"});
+  */
+};
+
+request.onsuccess = function() {
+  db = request.result;
+  printData();
+};
+
+
+function list_item_click(id){
+  window.location.href = 'detail.html?id='+id;
+}
+
+/*This function reads all the tasks from the IndexedDB and adds them on the page*/
+function printData(){
+  var objectStore = db.transaction("tasks").objectStore("tasks"); //objectstore variable for database
+  const home_message = document.getElementById('home-message');
+
+  var countRequest = objectStore.count();
+    countRequest.onsuccess = function() {
+      if( countRequest.result == 0 ){
+        home_message.innerHTML="You do not have any tasks added to your todo list. Press the add button in the top menu to add a new task.";
+      }
+      else{
+        home_message.innerHTML="";
+      }
+  }
+
+  objectStore.openCursor().onsuccess = event => {
+    var cursor = event.target.result;
+
+    if (cursor) {
+      var todo_class = cursor.value.highlight? "todo-highlight" : "";
+      // console.log("Data " + cursor.key + " is " + cursor.value.title);
+
+      todo_list.innerHTML = todo_list.innerHTML+ '<li class="mdc-list-item '+todo_class+'" tabindex="0" onclick=" list_item_click('+cursor.value.id+') " ><a href="detail.html?id='+cursor.value.id+'"> <span class="mdc-list-item__ripple"></span><span class="mdc-list-item__text">'+cursor.value.title+'</span> </a> </li> '
+
+      cursor.continue();
+    }
+    else {
+      // console.log("No more entries!");
+    }
+  };  
+}
+
+
+//Code for material elements
+const menu = mdc.menu.MDCMenu.attachTo(document.querySelector(".mdc-menu"));
+menu.setAbsolutePosition(100, 100);
+
+const menu_button = document.getElementById("todo-menu-button");
+
+menu_button.addEventListener("click",function(event){
+    event.preventDefault();
+    menu.open=true;
+});
+
+/*For checking the internet connection changes the icon in the header when internet connection changes*/
+document.getElementById('wifi-icon').innerHTML = navigator.onLine ? 'wifi' : 'wifi_off';
+
+function handleStateChange() {
+  var state = navigator.onLine ? 'online' : 'offline';
+  var wifi = navigator.onLine ? 'wifi' : 'wifi_off';
+  
+  document.getElementById('wifi-icon').innerHTML = wifi;
+}
+
+window.addEventListener('online', handleStateChange);
+window.addEventListener('offline', handleStateChange);
+
+
+</script>
+</html>  
