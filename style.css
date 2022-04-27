@@ -10,6 +10,10 @@ p{
     font-family: Arial;
 }
 
+.mt-2{
+    margin-top:20px;
+}
+
 .mdc-menu-surface--open {
     width: 150px;
 }
@@ -80,6 +84,20 @@ main li.mdc-list-item.todo-highlight {
 /*Details page*/
 #task-priority{
     text-transform: capitalize;
+}
+
+.detail-container{
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    width: 500px;    
+}
+
+.detail-container button.mdc-button, .detail-container .mdc-form-field{
+    width:100%;
 }
 
 /*Help page*/

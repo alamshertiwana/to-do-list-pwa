@@ -64,6 +64,14 @@
 
         </form>
 
+        <div class="mdc-form-field mt-2">
+          <button id="task-open-map" class="mdc-button mdc-button--raised foo-button" style="display:none;">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label">Open Map</span>
+          </button>                
+        </div>          
+
+
       </div>
 
     </main>
@@ -75,6 +83,7 @@
 const task_title        = document.getElementById("task-title");
 const task_description  = document.getElementById("task-description");
 const task_priority     = document.getElementById("task-priority");
+const task_map          = document.getElementById("task-open-map");
 let saved_id            = null;
 
 const request = indexedDB.open("TodoList",5);
@@ -115,6 +124,8 @@ function getData() {
 
     var myRecord = objectStoreRequest.result;
     //console.log(myRecord);
+
+    process_geo_location(myRecord.geo_location);
        
     task_title.innerHTML          = myRecord.title;
     task_description.innerHTML    = myRecord.description;
@@ -124,6 +135,24 @@ function getData() {
   };
 
 };
+
+function process_geo_location(location){
+
+  if(location == null){
+    return;
+  }
+  else{
+    task_map.style.display = "inline-flex";
+    console.log(location[0]);
+    console.log(location[1]);
+
+    task_map.addEventListener("click", function(){
+      window.open("http://www.google.com/maps/place/"+location[0]+","+location[1]);
+    });
+
+  }
+
+}
 
 //Code for the delete button
 document.getElementById("todo-delete-form").addEventListener("submit",function(e){
