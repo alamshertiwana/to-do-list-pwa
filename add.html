@@ -188,9 +188,25 @@ const checkbox = mdc.checkbox.MDCCheckbox.attachTo(document.querySelector('.mdc-
     navigator.geolocation.getCurrentPosition(function(position){
       lat = position.coords.latitude; 
       lon = position.coords.longitude;
+    }, function(error){
+      document.getElementById("geo-2").disabled = true;
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          alert("Please make sure that the Location is turned on for the device.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          alert("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+          alert("An unknown error occurred related to location.");
+          break;
+      }      
     });
   }
-
+  
 //Submit the form on the page
 document.getElementById("todo-add-form").addEventListener("submit",function(e){
   e.preventDefault();
