@@ -60,7 +60,6 @@
 
 fetch('https://mobileapp-903ad.web.app/help.json').then(  result => result.json() ).then(function (data){  
 
-  //console.log(data);
   const help_content = document.getElementById("help-content");
   
   for(let i=0; i<data.length; i++){

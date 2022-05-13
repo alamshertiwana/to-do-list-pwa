@@ -227,7 +227,6 @@ document.getElementById("todo-add-form").addEventListener("submit",function(e){
   var request = objectStore.add({title: todo_title, description: todo_description, priority: todo_priority, highlight: todo_highlight, geo_location: curr_geo_location});
 
   request.onsuccess = event => {
-    // event.target.result === customer.ssn;
     document.getElementById("task-title").value="";
     document.getElementById("task-description").value="";
     window.location.href='index.html'

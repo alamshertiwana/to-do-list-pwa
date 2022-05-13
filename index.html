@@ -111,13 +111,6 @@ request.onupgradeneeded = function() {
   // The database did not previously exist, so create object stores and indexes.
   const db = request.result;
   const store = db.createObjectStore("tasks", {keyPath: "id", autoIncrement:true});
-
-  // Populate with initial data.
-  /*
-  store.put({title: "Task 1", description: "Description of task 1"});
-  store.put({title: "Task 2", description: "Another description in the app"});
-  store.put({title: "Task 3", description: "Just another description in the app"});
-  */
 };
 
 request.onsuccess = function() {
@@ -150,7 +143,6 @@ function printData(){
 
     if (cursor) {
       var todo_class = cursor.value.highlight? "todo-highlight" : "";
-      // console.log("Data " + cursor.key + " is " + cursor.value.title);
 
       todo_list.innerHTML = todo_list.innerHTML+ '<li class="mdc-list-item '+todo_class+'" tabindex="0" onclick=" list_item_click('+cursor.value.id+') " ><a href="detail.html?id='+cursor.value.id+'"> <span class="mdc-list-item__ripple"></span><span class="mdc-list-item__text">'+cursor.value.title+'</span> </a> </li> '
 
