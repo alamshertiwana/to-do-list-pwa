@@ -61,6 +61,14 @@
         </ul>
         -->
       </ul>
+
+      <div id="add-task-fab" class="mdc-touch-target-wrapper">
+        <button id="add-task-fab-button" class="mdc-fab mdc-fab--mini mdc-fab--touch">
+          <div class="mdc-fab__ripple"></div>
+          <span class="material-icons mdc-fab__icon">add</span>
+          <div class="mdc-fab__touch"></div>
+        </button>
+      </div>      
       
     </main>
 </body>
@@ -158,6 +166,7 @@ function printData(){
 
 //Code for material elements
 const menu = mdc.menu.MDCMenu.attachTo(document.querySelector(".mdc-menu"));
+mdc.ripple.MDCRipple.attachTo(document.querySelector(".mdc-fab"));
 menu.setAbsolutePosition(100, 100);
 
 const menu_button = document.getElementById("todo-menu-button");
@@ -165,6 +174,10 @@ const menu_button = document.getElementById("todo-menu-button");
 menu_button.addEventListener("click",function(event){
     event.preventDefault();
     menu.open=true;
+});
+
+document.getElementById("add-task-fab-button").addEventListener("click", function(){
+    window.location.href='add.html';
 });
 
 /*For checking the internet connection changes the icon in the header when internet connection changes*/

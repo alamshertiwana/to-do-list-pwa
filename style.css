@@ -42,6 +42,10 @@ p{
     margin-right:auto;
 }
 
+.mdc-fab{
+    background-color: #6200ee;
+}
+
 /*Home page*/
 main .mdc-list-item {
     padding-top: 16px;
@@ -59,6 +63,12 @@ main li.mdc-list-item:not(.todo-highlight) {
 main li.mdc-list-item.todo-highlight {
     background: #6200ee;
     color: #fff;
+}
+
+div#add-task-fab {
+    position: fixed;
+    right: 5%;
+    bottom: 10%;
 }
 
 /*Add task page*/
