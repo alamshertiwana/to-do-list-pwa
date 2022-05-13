@@ -57,11 +57,9 @@
       
 </body>
 
-<script type="text/javascript" src="help.json"></script>
-
 <script>
 
-fetch('help.json').then(  result => result.json() ).then(function (data){  
+fetch('https://mobileapp-903ad.web.app/help.json').then(  result => result.json() ).then(function (data){  
 
   //console.log(data);
   const help_content = document.getElementById("help-content");
