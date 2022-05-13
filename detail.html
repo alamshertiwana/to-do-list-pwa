@@ -19,7 +19,6 @@
       </section>
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
         <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="add" onclick="window.location.href='add.html'">add</button>
-        <button id="wifi-icon" class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search">wifi</button>
 
         <div id="todo-menu-container" class="mdc-menu-surface--anchor">
             <button id="todo-menu-button" class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Options">more_vert</button>
@@ -180,20 +179,6 @@ menu_button.addEventListener("click",function(event){
     event.preventDefault();
     menu.open=true;
 });
-
-/*For checking the internet connection changes the icon in the header when internet connection changes*/
-document.getElementById('wifi-icon').innerHTML = navigator.onLine ? 'wifi' : 'wifi_off';
-
-function handleStateChange() {
-  var state = navigator.onLine ? 'online' : 'offline';
-  var wifi = navigator.onLine ? 'wifi' : 'wifi_off';
-  
-  document.getElementById('wifi-icon').innerHTML = wifi;
-}
-
-window.addEventListener('online', handleStateChange);
-window.addEventListener('offline', handleStateChange);
-
 
 </script>
 </html>  
