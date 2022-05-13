@@ -54,7 +54,7 @@
             <label class="todo-title mdc-text-field mdc-text-field--filled">
               <span class="mdc-text-field__ripple"></span>
               <span class="mdc-floating-label" id="task-title-text">Title</span>
-              <input id="task-title" class="mdc-text-field__input" type="text" aria-labelledby="task-title-text" autocomplete="off">
+              <input id="task-title" class="mdc-text-field__input" type="text" aria-labelledby="task-title-text" autocomplete="off" required>
               <span class="mdc-line-ripple"></span>
             </label>
 
@@ -64,7 +64,7 @@
             <label class="todo-description mdc-text-field mdc-text-field--filled">
               <span class="mdc-text-field__ripple"></span>
               <span class="mdc-floating-label" id="task-description-text">Description</span>
-              <input id="task-description" class="mdc-text-field__input" type="text" aria-labelledby="task-description-text" autocomplete="off">
+              <input id="task-description" class="mdc-text-field__input" type="text" aria-labelledby="task-description-text" autocomplete="off" required>
               <span class="mdc-line-ripple"></span>
             </label>
           </div>
@@ -206,7 +206,7 @@ const checkbox = mdc.checkbox.MDCCheckbox.attachTo(document.querySelector('.mdc-
       }      
     });
   }
-  
+
 //Submit the form on the page
 document.getElementById("todo-add-form").addEventListener("submit",function(e){
   e.preventDefault();
